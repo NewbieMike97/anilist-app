@@ -26,7 +26,11 @@ export default function AuthModal({ onClose }) {
     } else {
       const { error } = await signUp(email, password)
       if (error) {
-        setError(error.message)
+        if (error.message.toLowerCase().includes('rate limit')) {
+          setError('Too many sign-ups right now. Please try again in a few minutes.')
+        } else {
+          setError(error.message)
+        }
       } else {
         setMessage('Check your email to confirm your account, then sign in.')
       }
