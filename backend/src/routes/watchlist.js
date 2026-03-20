@@ -9,8 +9,8 @@ router.get('/', requireAuth, async (req, res) => {
   const db = createUserSupabase(req.token);
 
   const [{ data: watchlist, error: wErr }, { data: progress, error: pErr }] = await Promise.all([
-    db.from('watchlists').select('*').order('added_at', { ascending: false }),
-    db.from('episode_progress').select('*'),
+    db.from('watchlists').select('*').eq('user_id', req.user.id).order('added_at', { ascending: false }),
+    db.from('episode_progress').select('*').eq('user_id', req.user.id),
   ]);
 
   if (wErr || pErr) {
